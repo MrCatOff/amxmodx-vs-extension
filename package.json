@@ -1,0 +1,219 @@
+{
+    "name": "amxmodx-language",
+    "displayName": "AmxModX Language",
+    "description": "%extension.description%",
+    "version": "1.0.0",
+    "publisher": "MrCatOff",
+    "license": "GPL-3.0",
+    "icon": "images/extension-logo.png",
+    "l10n": "./l10n",
+    "galleryBanner": {
+        "theme": "dark",
+        "color": "#251654"
+    },
+    "author": {
+        "name": "MrCatOff",
+        "url": "https://github.com/MrCatOff/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/MrCatOff/amxmodx-vs-extension"
+    },
+    "bugs": {
+        "url": "https://github.com/MrCatOff/amxmodx-vs-extension/issues"
+    },
+    "keywords": [
+        "amxx",
+        "amxmodx",
+        "pawn",
+        "alliedmodders"
+    ],
+    "engines": {
+        "vscode": "^1.95.0",
+        "node": ">=20"
+    },
+    "categories": [
+        "Programming Languages",
+        "Linters",
+        "Snippets"
+    ],
+    "activationEvents": [
+        "onLanguage:amxmodx",
+        "workspaceContains:.amxxpack.json"
+    ],
+    "main": "./dist/extension.js",
+    "contributes": {
+        "languages": [
+            {
+                "id": "amxmodx",
+                "aliases": [
+                    "AmxModX",
+                    "amxmodx",
+                    "AMX Mod X"
+                ],
+                "extensions": [
+                    ".sma",
+                    ".inc"
+                ],
+                "firstLine": "#include\\s+[<\"]?\\s*amxmodx\\s*[>\"]?",
+                "configuration": "./language-configuration.json"
+            },
+            {
+                "id": "pawndoc",
+                "aliases": [
+                    "PAWNDoc",
+                    "PAWN-Doc",
+                    "PAWN Doc"
+                ]
+            }
+        ],
+        "grammars": [
+            {
+                "language": "amxmodx",
+                "scopeName": "source.amxmodx",
+                "path": "./syntaxes/amxmodx.tmLanguage"
+            },
+            {
+                "language": "pawndoc",
+                "scopeName": "text.pawndoc",
+                "path": "./syntaxes/pawndoc.json",
+                "injectTo": [
+                    "amxmodx"
+                ]
+            }
+        ],
+        "snippets": [
+            {
+                "language": "amxmodx",
+                "path": "./snippets/amxmodx.json"
+            }
+        ],
+        "configuration": {
+            "id": "amxmodx",
+            "type": "object",
+            "title": "%configuration.title%",
+            "properties": {
+                "amxmodx.project.type": {
+                    "type": "string",
+                    "enum": [
+                        "auto",
+                        "default",
+                        "amxxpack"
+                    ],
+                    "enumDescriptions": [
+                        "%project.type.auto%",
+                        "%project.type.default%",
+                        "%project.type.amxxpack%"
+                    ],
+                    "default": "auto",
+                    "description": "%project.type.description%"
+                },
+                "amxmodx.project.configFile": {
+                    "type": "string",
+                    "default": ".amxxpack.json",
+                    "description": "%project.configFile.description%"
+                },
+                "amxmodx.language.reparseInterval": {
+                    "type": "number",
+                    "default": 1500,
+                    "description": "%language.reparseInterval.description%"
+                },
+                "amxmodx.language.webApiLinks": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "%language.webApiLinks.description%"
+                },
+                "amxmodx.compiler.executablePath": {
+                    "type": "string",
+                    "default": "",
+                    "description": "%compiler.executablePath.description%"
+                },
+                "amxmodx.compiler.includePaths": {
+                    "type": "array",
+                    "default": [],
+                    "description": "%compiler.includePaths.description%"
+                },
+                "amxmodx.compiler.options": {
+                    "type": "array",
+                    "default": [],
+                    "description": "%compiler.options.description%"
+                },
+                "amxmodx.compiler.showInfoMessages": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "%compiler.showInfoMessages.description%"
+                },
+                "amxmodx.compiler.reformatOutput": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "%compiler.reformatOutput.description%"
+                },
+                "amxmodx.compiler.outputType": {
+                    "type": "string",
+                    "default": "source",
+                    "description": "%compiler.outputType.description%",
+                    "enum": [
+                        "source",
+                        "path"
+                    ]
+                },
+                "amxmodx.compiler.outputPath": {
+                    "type": "string",
+                    "default": "",
+                    "description": "%compiler.outputPath.description%"
+                },
+                "amxmodx.compiler.switchToOutput": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "%compiler.switchToOutput.description%"
+                }
+            }
+        },
+        "commands": [
+            {
+                "command": "amxmodx.compile",
+                "title": "%command.compile.title%",
+                "category": "%command.category%"
+            },
+            {
+                "command": "amxmodx.compileLocal",
+                "title": "%command.compileLocal.title%",
+                "category": "%command.category%"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run build",
+        "build": "node esbuild.mjs",
+        "watch": "node esbuild.mjs --watch",
+        "typecheck": "tsc --noEmit",
+        "lint": "eslint src",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "pretest:integration": "tsc -p test-integration && npm run build",
+        "test:integration": "node ./out-test/runTest.js",
+        "package": "vsce package"
+    },
+    "devDependencies": {
+        "@types/mocha": "^10.0.10",
+        "@types/node": "^22.10.0",
+        "@types/vscode": "^1.95.0",
+        "@typescript-eslint/eslint-plugin": "^8.18.0",
+        "@typescript-eslint/parser": "^8.18.0",
+        "@vscode/test-electron": "^2.4.1",
+        "@vscode/vsce": "^3.2.1",
+        "esbuild": "^0.24.0",
+        "eslint": "^9.17.0",
+        "mocha": "^11.0.1",
+        "typescript": "^5.7.2",
+        "typescript-eslint": "^8.18.0",
+        "vitest": "^2.1.8"
+    },
+    "dependencies": {
+        "@vscode/l10n": "^0.0.18",
+        "vscode-languageclient": "^9.0.1",
+        "vscode-languageserver": "^9.0.1",
+        "vscode-languageserver-textdocument": "^1.0.12",
+        "vscode-uri": "^3.0.8"
+    }
+}

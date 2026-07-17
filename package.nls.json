@@ -1,0 +1,22 @@
+{
+    "extension.description": "AmxModX Language Service",
+    "configuration.title": "AmxModX Configuration",
+    "command.category": "AmxModX",
+    "command.compile.title": "Compile Plugin",
+    "command.compileLocal.title": "Compile Plugin Local",
+    "project.type.description": "How the extension discovers include paths and compiler settings.",
+    "project.type.auto": "Use amxxpack if .amxxpack.json is present in the workspace root, otherwise fall back to amxmodx.compiler.* settings.",
+    "project.type.default": "Ignore .amxxpack.json even when it is present.",
+    "project.type.amxxpack": "Require .amxxpack.json; report an error when it is missing.",
+    "project.configFile.description": "Path to the amxxpack config, relative to the workspace root (or absolute).",
+    "language.reparseInterval.description": "The shortest allowed interval between two syntax re-parses of the same file.",
+    "language.webApiLinks.description": "Should #include statements that contain filenames from the AMXX package link to the Web API Reference.",
+    "compiler.executablePath.description": "Compiler location.",
+    "compiler.includePaths.description": "An array of strings containing include paths for the compiler.",
+    "compiler.options.description": "An array of additional options that should be passed to the compiler.",
+    "compiler.showInfoMessages.description": "Shows additional information like command arguments and exit code when compiling.",
+    "compiler.reformatOutput.description": "Should amxxpc output be reformatted to make it more readable.",
+    "compiler.outputType.description": "Where .amxx files should be output. Can be 'source' (same directory as input) or 'path' (the directory named by amxmodx.compiler.outputPath).",
+    "compiler.outputPath.description": "If amxmodx.compiler.outputType is set to 'path', use this directory to output .amxx files.",
+    "compiler.switchToOutput.description": "Switch to the 'Output' tab on build."
+}

@@ -1,0 +1,22 @@
+{
+    "extension.description": "Мовний сервіс AmxModX",
+    "configuration.title": "Налаштування AmxModX",
+    "command.category": "AmxModX",
+    "command.compile.title": "Скомпілювати плагін",
+    "command.compileLocal.title": "Скомпілювати плагін локально",
+    "project.type.description": "Як розширення визначає шляхи включень (include) та налаштування компілятора.",
+    "project.type.auto": "Використовувати amxxpack, якщо у корені робочої області є .amxxpack.json; інакше використовувати параметри amxmodx.compiler.*.",
+    "project.type.default": "Ігнорувати .amxxpack.json навіть якщо він є у проєкті.",
+    "project.type.amxxpack": "Вимагати .amxxpack.json; повідомити про помилку, якщо файл відсутній.",
+    "project.configFile.description": "Шлях до конфігурації amxxpack — відносно кореня робочої області (або абсолютний).",
+    "language.reparseInterval.description": "Мінімальний інтервал між двома повторними парсингами того самого файлу.",
+    "language.webApiLinks.description": "Чи мають #include директиви з файлами із пакета AMXX посилатися на онлайн-довідник Web API.",
+    "compiler.executablePath.description": "Розташування компілятора.",
+    "compiler.includePaths.description": "Масив рядків зі шляхами включень для компілятора.",
+    "compiler.options.description": "Масив додаткових параметрів, які потрібно передати компілятору.",
+    "compiler.showInfoMessages.description": "Показувати додаткову інформацію — аргументи команди та код завершення — під час компіляції.",
+    "compiler.reformatOutput.description": "Чи потрібно переформатовувати вивід amxxpc для кращої читабельності.",
+    "compiler.outputType.description": "Куди виводити файли .amxx: 'source' — у той самий каталог, що й вхідний файл; 'path' — у каталог, вказаний у amxmodx.compiler.outputPath.",
+    "compiler.outputPath.description": "Якщо amxmodx.compiler.outputType встановлено у 'path', використовувати цей каталог для файлів .amxx.",
+    "compiler.switchToOutput.description": "Перемикатися на вкладку 'Output' при збірці."
+}
