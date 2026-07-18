@@ -71,7 +71,7 @@
             {
                 "language": "amxmodx",
                 "scopeName": "source.amxmodx",
-                "path": "./syntaxes/amxmodx.tmLanguage"
+                "path": "./syntaxes/amxmodx.tmLanguage.json"
             },
             {
                 "language": "pawndoc",
@@ -207,7 +207,9 @@
         "mocha": "^11.0.1",
         "typescript": "^5.7.2",
         "typescript-eslint": "^8.18.0",
-        "vitest": "^2.1.8"
+        "vitest": "^2.1.8",
+        "vscode-oniguruma": "^2.0.1",
+        "vscode-textmate": "^9.3.2"
     },
     "dependencies": {
         "@vscode/l10n": "^0.0.18",

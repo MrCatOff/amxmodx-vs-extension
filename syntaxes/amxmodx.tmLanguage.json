@@ -1,0 +1,570 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "AmxModX",
+    "scopeName": "source.amxmodx",
+    "fileTypes": ["sma", "inc"],
+    "foldingStartMarker": "(?x)\n     /\\*\\*(?!\\*)\n    |^(?![^{]*?//|[^{]*?/\\*(?!.*?\\*/.*?\\{)).*?\\{\\s*($|//|/\\*(?!.*?\\*/.*\\S))",
+    "foldingStopMarker": "(?<!\\*)\\*\\*/|^\\s*\\}",
+    "patterns": [
+        { "include": "#comments" },
+        { "include": "#preprocessor-rule-enabled" },
+        { "include": "#preprocessor-rule-disabled" },
+        { "include": "#preprocessor-rule-other" },
+        { "include": "#pragma-mark" },
+        { "include": "#preprocessor-include" },
+        { "include": "#preprocessor-define" },
+        { "include": "#preprocessor-diagnostic" },
+        { "include": "#preprocessor-other" },
+        { "include": "#labels-and-tags" },
+        { "include": "#keywords-control" },
+        { "include": "#enum-declaration" },
+        { "include": "#native-forward-declaration" },
+        { "include": "#storage-modifiers" },
+        { "include": "#language-constants" },
+        { "include": "#operators-word" },
+        { "include": "#numbers" },
+        { "include": "#strings" },
+        { "include": "#function-declaration" },
+        { "include": "#block" },
+        { "include": "#operators" }
+    ],
+    "repository": {
+        "comments": {
+            "patterns": [
+                {
+                    "match": "^/\\* =(\\s*.*?)\\s*= \\*/$\\n?",
+                    "name": "comment.block.amxmodx",
+                    "captures": {
+                        "1": { "name": "meta.toc-list.banner.block.amxmodx" }
+                    }
+                },
+                {
+                    "begin": "(^|.)(?=/\\*\\*)",
+                    "beginCaptures": {
+                        "0": { "name": "punctuation.definition.comment.amxmodx" }
+                    },
+                    "end": "(?<=\\*/)(.|$)",
+                    "name": "comment.block.doc.amxmodx",
+                    "patterns": [
+                        { "include": "text.pawndoc" }
+                    ]
+                },
+                {
+                    "begin": "/\\*",
+                    "beginCaptures": {
+                        "0": { "name": "punctuation.definition.comment.amxmodx" }
+                    },
+                    "end": "\\*/",
+                    "name": "comment.block.amxmodx"
+                },
+                {
+                    "match": "\\*/.*\\n",
+                    "name": "invalid.illegal.stray-comment-end.amxmodx"
+                },
+                {
+                    "match": "^// =(\\s*.*?)\\s*=\\s*$\\n?",
+                    "name": "comment.line.banner.amxmodx",
+                    "captures": {
+                        "1": { "name": "meta.toc-list.banner.line.amxmodx" }
+                    }
+                },
+                {
+                    "begin": "//",
+                    "beginCaptures": {
+                        "0": { "name": "punctuation.definition.comment.amxmodx" }
+                    },
+                    "end": "$\\n?",
+                    "name": "comment.line.double-slash.amxmodx",
+                    "patterns": [
+                        {
+                            "match": "\\\\\\s*\\n",
+                            "name": "punctuation.separator.continuation.amxmodx"
+                        }
+                    ]
+                }
+            ]
+        },
+        "preprocessor-rule-enabled": {
+            "begin": "^\\s*(#(if)\\s+(0*1)\\b)",
+            "captures": {
+                "1": { "name": "meta.preprocessor.amxmodx" },
+                "2": { "name": "keyword.control.import.if.amxmodx" },
+                "3": { "name": "constant.numeric.preprocessor.amxmodx" }
+            },
+            "end": "^\\s*(#\\s*(endif)\\b)",
+            "endCaptures": {
+                "1": { "name": "meta.preprocessor.amxmodx" },
+                "2": { "name": "keyword.control.import.endif.amxmodx" }
+            },
+            "patterns": [
+                {
+                    "begin": "^\\s*(#\\s*(else)\\b).*",
+                    "captures": {
+                        "1": { "name": "meta.preprocessor.amxmodx" },
+                        "2": { "name": "keyword.control.import.else.amxmodx" }
+                    },
+                    "contentName": "comment.block.preprocessor.else-branch.amxmodx",
+                    "end": "(?=^\\s*#\\s*endif\\b.*$)",
+                    "patterns": [
+                        { "include": "#preprocessor-disabled" },
+                        { "include": "#pragma-mark" }
+                    ]
+                },
+                {
+                    "begin": "",
+                    "end": "(?=^\\s*#\\s*(else|endif)\\b.*$)",
+                    "patterns": [
+                        { "include": "$base" }
+                    ]
+                }
+            ]
+        },
+        "preprocessor-rule-disabled": {
+            "begin": "^\\s*(#(if)\\s+(0)\\b).*",
+            "captures": {
+                "1": { "name": "meta.preprocessor.amxmodx" },
+                "2": { "name": "keyword.control.import.if.amxmodx" },
+                "3": { "name": "constant.numeric.preprocessor.amxmodx" }
+            },
+            "end": "^\\s*(#\\s*(endif)\\b)",
+            "endCaptures": {
+                "1": { "name": "meta.preprocessor.amxmodx" },
+                "2": { "name": "keyword.control.import.endif.amxmodx" }
+            },
+            "patterns": [
+                {
+                    "begin": "^\\s*(#\\s*(else)\\b)",
+                    "captures": {
+                        "1": { "name": "meta.preprocessor.amxmodx" },
+                        "2": { "name": "keyword.control.import.else.amxmodx" }
+                    },
+                    "end": "(?=^\\s*#\\s*endif\\b.*$)",
+                    "patterns": [
+                        { "include": "$base" }
+                    ]
+                },
+                {
+                    "begin": "",
+                    "end": "(?=^\\s*#\\s*(else|endif)\\b.*$)",
+                    "name": "comment.block.preprocessor.if-branch.amxmodx",
+                    "patterns": [
+                        { "include": "#preprocessor-disabled" },
+                        { "include": "#pragma-mark" }
+                    ]
+                }
+            ]
+        },
+        "preprocessor-rule-other": {
+            "begin": "^\\s*(#\\s*(if(n?def)?)\\b.*?(?:(?=(?://|/\\*))|$))",
+            "captures": {
+                "1": { "name": "meta.preprocessor.amxmodx" },
+                "2": { "name": "keyword.control.import.amxmodx" }
+            },
+            "end": "^\\s*(#\\s*(endif)\\b).*$",
+            "endCaptures": {
+                "1": { "name": "meta.preprocessor.amxmodx" },
+                "2": { "name": "keyword.control.import.endif.amxmodx" }
+            },
+            "patterns": [
+                { "include": "$base" }
+            ]
+        },
+        "preprocessor-disabled": {
+            "begin": "^\\s*#\\s*if(n?def)?\\b.*$",
+            "end": "^\\s*#\\s*endif\\b.*$",
+            "patterns": [
+                { "include": "#preprocessor-disabled" },
+                { "include": "#pragma-mark" }
+            ]
+        },
+        "pragma-mark": {
+            "match": "^\\s*(#\\s*(pragma\\s+mark)\\s+(.*))",
+            "name": "meta.section.amxmodx",
+            "captures": {
+                "1": { "name": "meta.preprocessor.amxmodx" },
+                "2": { "name": "keyword.control.import.pragma.amxmodx" },
+                "3": { "name": "meta.toc-list.pragma-mark.amxmodx" }
+            }
+        },
+        "preprocessor-include": {
+            "begin": "^\\s*#\\s*((?:try)?include)\\b\\s*",
+            "beginCaptures": {
+                "1": { "name": "keyword.control.import.include.amxmodx" }
+            },
+            "end": "(?=(?://|/\\*))|$",
+            "name": "meta.preprocessor.include.amxmodx",
+            "patterns": [
+                {
+                    "match": "\\\\\\s*\\n",
+                    "name": "punctuation.separator.continuation.amxmodx"
+                },
+                {
+                    "begin": "\"",
+                    "beginCaptures": {
+                        "0": { "name": "punctuation.definition.string.begin.amxmodx" }
+                    },
+                    "end": "\"",
+                    "endCaptures": {
+                        "0": { "name": "punctuation.definition.string.end.amxmodx" }
+                    },
+                    "name": "string.quoted.double.include.amxmodx"
+                },
+                {
+                    "begin": "<",
+                    "beginCaptures": {
+                        "0": { "name": "punctuation.definition.string.begin.amxmodx" }
+                    },
+                    "end": ">",
+                    "endCaptures": {
+                        "0": { "name": "punctuation.definition.string.end.amxmodx" }
+                    },
+                    "name": "string.quoted.other.lt-gt.include.amxmodx"
+                },
+                {
+                    "match": "[A-Za-z_][A-Za-z0-9_./\\\\-]*",
+                    "name": "string.unquoted.include.amxmodx"
+                }
+            ]
+        },
+        "preprocessor-define": {
+            "begin": "(?x)\n                ^\\s*\\#\\s*(define)\\s+\n                ((?<id>[A-Za-z_][A-Za-z0-9_]*))\n                (?:\n                    (\\()\n                        (\n                            \\s* \\g<id> \\s*\n                            ((,) \\s* \\g<id> \\s*)*\n                            (?:\\.\\.\\.)?\n                        )\n                    (\\))\n                )?",
+            "beginCaptures": {
+                "1": { "name": "keyword.control.import.define.amxmodx" },
+                "2": { "name": "entity.name.function.preprocessor.amxmodx" },
+                "4": { "name": "punctuation.definition.parameters.amxmodx" },
+                "5": { "name": "variable.parameter.preprocessor.amxmodx" },
+                "7": { "name": "punctuation.separator.parameters.amxmodx" },
+                "8": { "name": "punctuation.definition.parameters.amxmodx" }
+            },
+            "end": "(?=(?://|/\\*))|$",
+            "name": "meta.preprocessor.macro.amxmodx",
+            "patterns": [
+                {
+                    "match": "\\\\\\s*\\n",
+                    "name": "punctuation.separator.continuation.amxmodx"
+                },
+                { "include": "$base" }
+            ]
+        },
+        "preprocessor-diagnostic": {
+            "begin": "^\\s*#\\s*(error|warning|endinput|assert)\\b",
+            "beginCaptures": {
+                "1": { "name": "keyword.control.import.error.amxmodx" }
+            },
+            "end": "(?=(?://|/\\*))|$",
+            "name": "meta.preprocessor.diagnostic.amxmodx",
+            "patterns": [
+                {
+                    "match": "\\\\\\s*\\n",
+                    "name": "punctuation.separator.continuation.amxmodx"
+                }
+            ]
+        },
+        "preprocessor-other": {
+            "begin": "^\\s*#\\s*(defined|elseif|else|if|pragma|undef|section|line|file|emit)\\b",
+            "beginCaptures": {
+                "1": { "name": "keyword.control.import.amxmodx" }
+            },
+            "end": "(?=(?://|/\\*))|$",
+            "name": "meta.preprocessor.amxmodx",
+            "patterns": [
+                {
+                    "match": "\\\\\\s*\\n",
+                    "name": "punctuation.separator.continuation.amxmodx"
+                },
+                { "include": "$base" }
+            ]
+        },
+        "labels-and-tags": {
+            "match": "(?x)\n                (default)\\s*:|\n                \\?(?!.*\\().*?(?'ident'[A-Za-z_@][A-Za-z0-9_@]*+)\\s*:|\n                (case)\\s+(\\g'ident')\\s*:|\n                :\\s*\\g'ident'\\s*|\n                (\n                    \\{(?:\\s*\\g'ident'\\s*(?:,)?)+\\}\\s*:|\n                    \\b\\g'ident'\\s*:\n                )",
+            "captures": {
+                "1": { "name": "keyword.control.amxmodx" },
+                "3": { "name": "keyword.control.amxmodx" },
+                "4": { "name": "constant.other.amxmodx" },
+                "5": { "name": "storage.type.amxmodx" }
+            }
+        },
+        "keywords-control": {
+            "match": "\\b(break|case|continue|default|do|else|for|goto|if|return|switch|while|state|exit)\\b",
+            "name": "keyword.control.amxmodx"
+        },
+        "enum-declaration": {
+            "match": "(enum)\\s+((?:_:\\s*)?[A-Za-z_@][A-Za-z0-9_@]*)?",
+            "captures": {
+                "1": { "name": "entity.name.type.amxmodx" },
+                "2": { "name": "storage.type.amxmodx" }
+            }
+        },
+        "native-forward-declaration": {
+            "match": "(?x)\n                \\b(native|forward)\\b\n                \\s+\n                (?:\n                    (?:([A-Za-z_@][A-Za-z0-9_@]*)\\s*:\\s*)?\n                    ([A-Za-z_@][A-Za-z0-9_@]*)\n                )?\n                \\s*(?=\\()",
+            "captures": {
+                "1": { "name": "storage.modifier.amxmodx" },
+                "2": { "name": "storage.type.amxmodx" },
+                "3": { "name": "entity.name.function.amxmodx" }
+            }
+        },
+        "storage-modifiers": {
+            "match": "\\b(const|static|stock|public|new|native|forward)\\b",
+            "name": "storage.modifier.amxmodx"
+        },
+        "language-constants": {
+            "match": "\\b(true|false|EOS|cellbits|cellmax|cellmin|charsmax|__DATE__|__TIME__|__LINE__|__FILE__|__Pawn|debug)\\b",
+            "name": "constant.language.amxmodx"
+        },
+        "operators-word": {
+            "match": "\\b(sizeof|tagof|defined|assert)\\b",
+            "name": "keyword.operator.word.amxmodx"
+        },
+        "numbers": {
+            "patterns": [
+                {
+                    "match": "\\b0[xX][0-9a-fA-F][0-9a-fA-F_]*\\b",
+                    "name": "constant.numeric.hex.amxmodx"
+                },
+                {
+                    "match": "\\b0[bB][01][01_]*\\b",
+                    "name": "constant.numeric.binary.amxmodx"
+                },
+                {
+                    "match": "\\b[0-9][0-9_]*\\.[0-9][0-9_]*(?:[eE][+-]?[0-9]+)?\\b",
+                    "name": "constant.numeric.float.amxmodx"
+                },
+                {
+                    "match": "\\b[0-9][0-9_]*[eE][+-]?[0-9]+\\b",
+                    "name": "constant.numeric.float.amxmodx"
+                },
+                {
+                    "match": "\\b[0-9][0-9_]*\\b",
+                    "name": "constant.numeric.decimal.amxmodx"
+                }
+            ]
+        },
+        "strings": {
+            "patterns": [
+                {
+                    "begin": "\"",
+                    "beginCaptures": {
+                        "0": { "name": "punctuation.definition.string.begin.amxmodx" }
+                    },
+                    "end": "\"",
+                    "endCaptures": {
+                        "0": { "name": "punctuation.definition.string.end.amxmodx" }
+                    },
+                    "name": "string.quoted.double.amxmodx",
+                    "patterns": [
+                        { "include": "#string-escaped-char" },
+                        { "include": "#string-format-specifier" }
+                    ]
+                },
+                {
+                    "begin": "'",
+                    "beginCaptures": {
+                        "0": { "name": "punctuation.definition.string.begin.amxmodx" }
+                    },
+                    "end": "'",
+                    "endCaptures": {
+                        "0": { "name": "punctuation.definition.string.end.amxmodx" }
+                    },
+                    "name": "string.quoted.single.amxmodx",
+                    "patterns": [
+                        { "include": "#string-escaped-char" }
+                    ]
+                }
+            ]
+        },
+        "string-escaped-char": {
+            "patterns": [
+                {
+                    "match": "\\^(\\^|[abefnprtv'\"?]|[0-3]\\d{0,2}|[4-7]\\d?|x[a-fA-F0-9]{0,2}|u[a-fA-F0-9]{0,4}|U[a-fA-F0-9]{0,8})",
+                    "name": "constant.character.escape.amxmodx"
+                },
+                {
+                    "match": "\\^.",
+                    "name": "invalid.illegal.unknown-escape.amxmodx"
+                }
+            ]
+        },
+        "string-format-specifier": {
+            "match": "%%|%-?[0-9]*(?:\\.[0-9]+)?[cdefgiLlnosuxX]",
+            "name": "constant.other.placeholder.amxmodx"
+        },
+        "function-declaration": {
+            "begin": "(?x)\n                (?:\n                    ^\n                  |\n                    (?: (?=\\s) (?<!else|new|return) (?<=\\w)\n                      | (?=\\s*[A-Za-z_]) (?<!&&) (?<=[*&>])\n                    )\n                )\n                (\\s*) (?!(?:while|for|do|if|else|switch|return)\\s*\\()\n                (?:\n                    ((?:[A-Za-z_@][A-Za-z0-9_@]*+)++\\s*:\\s*)?\n                    (\n                        (?:[A-Za-z_@][A-Za-z0-9_@]*+)++\n                    )\n                )\n                \\s*(?=\\()",
+            "beginCaptures": {
+                "1": { "name": "punctuation.whitespace.function.leading.amxmodx" },
+                "2": { "name": "storage.type.amxmodx" },
+                "3": { "name": "entity.name.function.amxmodx" }
+            },
+            "end": "(?<=\\})|(?=#)|(;)|(?=^\\s*(const|static|stock|public|new|native|forward)\\b)",
+            "endCaptures": {
+                "1": { "name": "punctuation.terminator.statement.amxmodx" }
+            },
+            "name": "meta.function.amxmodx",
+            "patterns": [
+                { "include": "#comments" },
+                { "include": "#parens" },
+                {
+                    "match": "\\bconst\\b",
+                    "name": "storage.modifier.amxmodx"
+                },
+                { "include": "#block" }
+            ]
+        },
+        "block": {
+            "begin": "\\{",
+            "beginCaptures": {
+                "0": { "name": "punctuation.section.block.begin.amxmodx" }
+            },
+            "end": "\\}",
+            "endCaptures": {
+                "0": { "name": "punctuation.section.block.end.amxmodx" }
+            },
+            "name": "meta.block.amxmodx",
+            "patterns": [
+                { "include": "#block-innards" }
+            ]
+        },
+        "block-innards": {
+            "patterns": [
+                { "include": "#preprocessor-rule-enabled-block" },
+                { "include": "#preprocessor-rule-disabled-block" },
+                { "include": "#preprocessor-rule-other-block" },
+                { "include": "#operators-word" },
+                {
+                    "match": "(?x)\n                        (?:(?<=else|new|return)|(?<!\\w))(\\s+)?\n                        ((?:@)?\\b\n                            (?!(while|for|do|if|else|switch|return)\\s*\\()\n                            (?:[A-Za-z_][A-Za-z0-9_@]*+\\b)++\n                        )\n                        \\s*(\\()",
+                    "captures": {
+                        "1": { "name": "punctuation.whitespace.function-call.leading.amxmodx" },
+                        "2": { "name": "support.function.any-method.amxmodx" },
+                        "3": { "name": "punctuation.definition.parameters.amxmodx" }
+                    },
+                    "name": "meta.function-call.amxmodx"
+                },
+                { "include": "#block" },
+                { "include": "$base" }
+            ]
+        },
+        "preprocessor-rule-enabled-block": {
+            "begin": "^\\s*(#(if)\\s+(0*1)\\b)",
+            "captures": {
+                "1": { "name": "meta.preprocessor.amxmodx" },
+                "2": { "name": "keyword.control.import.if.amxmodx" },
+                "3": { "name": "constant.numeric.preprocessor.amxmodx" }
+            },
+            "end": "^\\s*(#\\s*(endif)\\b)",
+            "endCaptures": {
+                "1": { "name": "meta.preprocessor.amxmodx" },
+                "2": { "name": "keyword.control.import.endif.amxmodx" }
+            },
+            "patterns": [
+                {
+                    "begin": "^\\s*(#\\s*(else)\\b).*",
+                    "captures": {
+                        "1": { "name": "meta.preprocessor.amxmodx" },
+                        "2": { "name": "keyword.control.import.else.amxmodx" }
+                    },
+                    "contentName": "comment.block.preprocessor.else-branch.in-block.amxmodx",
+                    "end": "(?=^\\s*#\\s*endif\\b.*$)",
+                    "patterns": [
+                        { "include": "#preprocessor-disabled" },
+                        { "include": "#pragma-mark" }
+                    ]
+                },
+                {
+                    "begin": "",
+                    "end": "(?=^\\s*#\\s*(else|endif)\\b.*$)",
+                    "patterns": [
+                        { "include": "#block-innards" }
+                    ]
+                }
+            ]
+        },
+        "preprocessor-rule-disabled-block": {
+            "begin": "^\\s*(#(if)\\s+(0)\\b).*",
+            "captures": {
+                "1": { "name": "meta.preprocessor.amxmodx" },
+                "2": { "name": "keyword.control.import.if.amxmodx" },
+                "3": { "name": "constant.numeric.preprocessor.amxmodx" }
+            },
+            "end": "^\\s*(#\\s*(endif)\\b)",
+            "endCaptures": {
+                "1": { "name": "meta.preprocessor.amxmodx" },
+                "2": { "name": "keyword.control.import.endif.amxmodx" }
+            },
+            "patterns": [
+                {
+                    "begin": "^\\s*(#\\s*(else)\\b)",
+                    "captures": {
+                        "1": { "name": "meta.preprocessor.amxmodx" },
+                        "2": { "name": "keyword.control.import.else.amxmodx" }
+                    },
+                    "end": "(?=^\\s*#\\s*endif\\b.*$)",
+                    "patterns": [
+                        { "include": "#block-innards" }
+                    ]
+                },
+                {
+                    "begin": "",
+                    "end": "(?=^\\s*#\\s*(else|endif)\\b.*$)",
+                    "name": "comment.block.preprocessor.if-branch.in-block.amxmodx",
+                    "patterns": [
+                        { "include": "#preprocessor-disabled" },
+                        { "include": "#pragma-mark" }
+                    ]
+                }
+            ]
+        },
+        "preprocessor-rule-other-block": {
+            "begin": "^\\s*(#\\s*(if(n?def)?)\\b.*?(?:(?=(?://|/\\*))|$))",
+            "captures": {
+                "1": { "name": "meta.preprocessor.amxmodx" },
+                "2": { "name": "keyword.control.import.amxmodx" }
+            },
+            "end": "^\\s*(#\\s*(endif)\\b).*$",
+            "endCaptures": {
+                "1": { "name": "meta.preprocessor.amxmodx" },
+                "2": { "name": "keyword.control.import.endif.amxmodx" }
+            },
+            "patterns": [
+                { "include": "#block-innards" }
+            ]
+        },
+        "parens": {
+            "begin": "\\(",
+            "beginCaptures": {
+                "0": { "name": "punctuation.section.parens.begin.amxmodx" }
+            },
+            "end": "\\)",
+            "endCaptures": {
+                "0": { "name": "punctuation.section.parens.end.amxmodx" }
+            },
+            "name": "meta.parens.amxmodx",
+            "patterns": [
+                { "include": "$base" }
+            ]
+        },
+        "operators": {
+            "patterns": [
+                {
+                    "match": "(?:==|!=|<=|>=|<|>)",
+                    "name": "keyword.operator.comparison.amxmodx"
+                },
+                {
+                    "match": "(?:&&|\\|\\||!)",
+                    "name": "keyword.operator.logical.amxmodx"
+                },
+                {
+                    "match": "(?:\\+=|-=|\\*=|/=|%=|<<=|>>=|>>>=|&=|\\|=|\\^=|=)",
+                    "name": "keyword.operator.assignment.amxmodx"
+                },
+                {
+                    "match": "(?:\\+\\+|--|\\+|-|\\*|/|%)",
+                    "name": "keyword.operator.arithmetic.amxmodx"
+                },
+                {
+                    "match": "(?:<<|>>>|>>|&|\\||\\^|~)",
+                    "name": "keyword.operator.bitwise.amxmodx"
+                }
+            ]
+        }
+    }
+}
