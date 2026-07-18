@@ -2,7 +2,7 @@
     "name": "amxmodx-language",
     "displayName": "AmxModX Language",
     "description": "%extension.description%",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "publisher": "MrCatOff",
     "license": "GPL-3.0",
     "icon": "images/extension-logo.png",
