@@ -135,4 +135,42 @@ describe('parser', () => {
             expect(r.values[0].identifier).toBe('g_real');
         });
     });
+
+    describe('optional semicolons (Pawn `-;+` style)', () => {
+        it('captures each of multiple semicolon-less `new` declarations', () => {
+            const src = 'new g_a\nnew g_b\nnew g_c\n';
+            const r = parse(URI, src, false);
+            expect(r.values.map((v) => v.identifier)).toEqual(['g_a', 'g_b', 'g_c']);
+            expect(r.diagnostics).toEqual([]);
+        });
+
+        it('does not confuse a following callable body for the tail of a `new` declaration', () => {
+            const src =
+                'new g_a\n' +
+                'new g_b\n' +
+                'public plugin_precache()\n' +
+                '{\n' +
+                '\tg_a = 1\n' +
+                '\tg_b = 2\n' +
+                '}\n';
+            const r = parse(URI, src, false);
+            // The `}` on the last line is the callable body's closing brace,
+            // not an unmatched one. Regression test for the false-positive
+            // triggered by cs_ham_bots_api.sma.
+            expect(r.diagnostics.filter((d) => d.severity === DiagnosticSeverity.Error)).toEqual([]);
+            expect(r.callables.map((c) => c.identifier)).toContain('plugin_precache');
+        });
+
+        it('treats a preprocessor directive on the next line as an implicit statement break', () => {
+            const src = 'new g_a\n#include <amxmodx>\n';
+            const r = parse(URI, src, false);
+            expect(r.values.map((v) => v.identifier)).toEqual(['g_a']);
+            expect(r.headerInclusions.map((i) => i.filename)).toEqual(['amxmodx']);
+        });
+
+        it('still recognises the semicolon terminator when it is present', () => {
+            const r = parse(URI, 'new g_a;\nnew g_b;\n', false);
+            expect(r.values.map((v) => v.identifier)).toEqual(['g_a', 'g_b']);
+        });
+    });
 });

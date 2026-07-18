@@ -353,6 +353,13 @@ function skipDeclarationTail(cursor: TokenCursor): void {
     let bracket = 0;
     while (!cursor.eof()) {
         const t = cursor.peek();
+        if (paren === 0 && bracket === 0) {
+            // Implicit statement boundary — see the comment in
+            // parseValueDeclaration.
+            if (t.kind === 'preprocessor') return;
+            if (t.kind === 'ident' && STORAGE_SPECIFIERS.has(t.value)) return;
+            if (t.kind === 'punct' && t.value === '}') return;
+        }
         if (t.kind === 'punct') {
             if (t.value === '(') paren++;
             else if (t.value === ')') paren--;
@@ -456,6 +463,15 @@ function parseValueDeclaration(
 
     while (!cursor.eof()) {
         const t = cursor.peek();
+        if (paren === 0 && bracket === 0) {
+            // Pawn allows omitting the trailing `;`, so we also stop on the
+            // syntactic markers that unambiguously begin a *new* top-level
+            // statement: another storage-class specifier (`new`, `public`,
+            // etc.), a preprocessor directive, or a block delimiter.
+            if (t.kind === 'preprocessor') break;
+            if (t.kind === 'ident' && STORAGE_SPECIFIERS.has(t.value)) break;
+            if (t.kind === 'punct' && (t.value === '{' || t.value === '}')) break;
+        }
         if (t.kind === 'punct') {
             if (t.value === '(') paren++;
             else if (t.value === ')') paren--;
