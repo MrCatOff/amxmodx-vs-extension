@@ -29,6 +29,20 @@ describe('parser', () => {
             expect(r.headerInclusions[0].filename).toBe('amxmodx');
             expect(r.headerInclusions[0].isLocal).toBe(true);
         });
+
+        it('allows a trailing line comment after the terminator', () => {
+            const r = parse(URI, '#include <amxmodx> // core header\n', false);
+            expect(r.headerInclusions).toHaveLength(1);
+            expect(r.headerInclusions[0].filename).toBe('amxmodx');
+            expect(r.diagnostics).toEqual([]);
+        });
+
+        it('allows a trailing block comment after the terminator', () => {
+            const r = parse(URI, '#include "myfile" /* used only in tests */\n', false);
+            expect(r.headerInclusions).toHaveLength(1);
+            expect(r.headerInclusions[0].filename).toBe('myfile');
+            expect(r.diagnostics).toEqual([]);
+        });
     });
 
     describe('callable declarations', () => {

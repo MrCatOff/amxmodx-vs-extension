@@ -389,7 +389,7 @@
             "name": "constant.other.placeholder.amxmodx"
         },
         "function-declaration": {
-            "begin": "(?x)\n                (?:\n                    ^\n                  |\n                    (?: (?=\\s) (?<!else|new|return) (?<=\\w)\n                      | (?=\\s*[A-Za-z_]) (?<!&&) (?<=[*&>])\n                    )\n                )\n                (\\s*) (?!(?:while|for|do|if|else|switch|return)\\s*\\()\n                (?:\n                    ((?:[A-Za-z_@][A-Za-z0-9_@]*+)++\\s*:\\s*)?\n                    (\n                        (?:[A-Za-z_@][A-Za-z0-9_@]*+)++\n                    )\n                )\n                \\s*(?=\\()",
+            "begin": "(?x)\n                (?:\n                    ^\n                  |\n                    (?: (?=\\s) (?<!else|new|return) (?<=\\w)\n                      | (?=\\s*[A-Za-z_]) (?<!&&) (?<=[*&>])\n                      | (?=\\s*[A-Za-z_]) (?<=[A-Za-z_@]:)\n                    )\n                )\n                (\\s*) (?!(?:while|for|do|if|else|switch|return)\\s*\\()\n                (?:\n                    ((?:[A-Za-z_@][A-Za-z0-9_@]*+)++\\s*:\\s*)?\n                    (\n                        (?:[A-Za-z_@][A-Za-z0-9_@]*+)++\n                    )\n                )\n                \\s*(?=\\()",
             "beginCaptures": {
                 "1": { "name": "punctuation.whitespace.function.leading.amxmodx" },
                 "2": { "name": "storage.type.amxmodx" },

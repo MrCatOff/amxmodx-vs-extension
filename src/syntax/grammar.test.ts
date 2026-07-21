@@ -203,6 +203,19 @@ describe('amxmodx.tmLanguage.json', () => {
             const s = scopeAt('forward plugin_end()', 'plugin_end');
             expect(s).toContain('entity.name.function.amxmodx');
         });
+
+        it('captures the function name when preceded by a tag prefix', () => {
+            const s = scopeAt('bool:is_ready(const args[] = "")', 'is_ready');
+            expect(s).toContain('entity.name.function.amxmodx');
+
+            const tag = scopeAt('bool:is_ready(const args[] = "")', 'bool');
+            expect(tag).toContain('storage.type.amxmodx');
+        });
+
+        it('captures the function name when the tag prefix has a trailing space', () => {
+            const s = scopeAt('Float: compute(Float:x)', 'compute');
+            expect(s).toContain('entity.name.function.amxmodx');
+        });
     });
 
     describe('control flow', () => {

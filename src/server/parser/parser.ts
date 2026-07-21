@@ -148,6 +148,16 @@ export function parse(fileUri: string, content: string, skipStatic: boolean): Pa
     return results;
 }
 
+function stripTrailingComments(text: string): string {
+    // Line comments always start at `//` (not inside a string — the caller only
+    // hands us the tail after a filename terminator, so there are no strings).
+    const line = text.indexOf('//');
+    let out = line >= 0 ? text.substring(0, line) : text;
+    // Block comments may appear one or more times before the tail; strip them all.
+    out = out.replace(/\/\*[\s\S]*?\*\//g, '');
+    return out;
+}
+
 function handlePreprocessor(tok: PreprocessorToken, results: ParserResults): void {
     if (tok.directive !== 'include' && tok.directive !== 'tryinclude') return;
 
@@ -196,7 +206,7 @@ function handlePreprocessor(tok: PreprocessorToken, results: ParserResults): voi
 
     if (terminator !== undefined) idx++;
 
-    const rest = value.substring(idx).trim();
+    const rest = stripTrailingComments(value.substring(idx)).trim();
     if (terminator !== undefined && rest.length > 0) {
         results.diagnostics.push({
             message: t('No extra characters are allowed after an #include statement'),
