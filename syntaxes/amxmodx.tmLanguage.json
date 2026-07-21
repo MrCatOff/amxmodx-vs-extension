@@ -39,6 +39,13 @@
                     }
                 },
                 {
+                    "match": "^\\s*/\\*-+\\[\\s*(.*?)\\s*\\]-+\\*/\\s*$\\n?",
+                    "name": "comment.block.banner.amxmodx",
+                    "captures": {
+                        "1": { "name": "meta.toc-list.banner.block.amxmodx" }
+                    }
+                },
+                {
                     "begin": "(^|.)(?=/\\*\\*)",
                     "beginCaptures": {
                         "0": { "name": "punctuation.definition.comment.amxmodx" }
@@ -66,6 +73,15 @@
                     "name": "comment.line.banner.amxmodx",
                     "captures": {
                         "1": { "name": "meta.toc-list.banner.line.amxmodx" }
+                    }
+                },
+                {
+                    "match": "^\\s*(//)\\s*(#?(?:region|endregion))\\b(?:\\s+(.*?))?\\s*$",
+                    "name": "comment.line.region.amxmodx",
+                    "captures": {
+                        "1": { "name": "punctuation.definition.comment.amxmodx" },
+                        "2": { "name": "keyword.control.import.region.amxmodx" },
+                        "3": { "name": "meta.toc-list.region.amxmodx" }
                     }
                 },
                 {

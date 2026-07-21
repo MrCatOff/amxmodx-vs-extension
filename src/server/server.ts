@@ -19,6 +19,7 @@ import { provideCompletions } from './features/completion.js';
 import { provideDefinition } from './features/definition.js';
 import { buildIncludeLinks } from './features/document-links.js';
 import { provideDocumentSymbols } from './features/document-symbols.js';
+import { provideFoldingRanges } from './features/folding.js';
 import { provideHover } from './features/hover.js';
 import { provideSignatureHelp } from './features/signature.js';
 import { DIAGNOSTIC_SOURCE, parse } from './parser/parser.js';
@@ -85,6 +86,7 @@ connection.onInitialize((params: InitializeParams): InitializeResult => {
             definitionProvider: true,
             signatureHelpProvider: { triggerCharacters: ['(', ','] },
             documentSymbolProvider: true,
+            foldingRangeProvider: true,
             completionProvider: {
                 resolveProvider: false,
                 triggerCharacters: ['(', ',', '=', '@'],
@@ -194,6 +196,12 @@ connection.onDocumentSymbol((params) => {
     const data = documentsData.get(document);
     if (!data) return [];
     return provideDocumentSymbols(params.textDocument.uri, data);
+});
+
+connection.onFoldingRanges((params) => {
+    const document = documents.get(params.textDocument.uri);
+    if (!document) return [];
+    return provideFoldingRanges(document.getText());
 });
 
 connection.onCompletion((params) => {

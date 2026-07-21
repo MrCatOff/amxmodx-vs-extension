@@ -187,4 +187,16 @@ describe('parser', () => {
             expect(r.values.map((v) => v.identifier)).toEqual(['g_a', 'g_b']);
         });
     });
+
+    describe('region markers', () => {
+        it('accepts `// #region` / `// #endregion` comment markers without diagnostics', () => {
+            const src =
+                '// #region Public API\n' +
+                'public plugin_init() { }\n' +
+                '// #endregion\n';
+            const r = parse(URI, src, false);
+            expect(r.diagnostics).toEqual([]);
+            expect(r.callables.map((c) => c.identifier)).toContain('plugin_init');
+        });
+    });
 });

@@ -85,6 +85,37 @@ describe('amxmodx.tmLanguage.json', () => {
             const s = scopeAt('#pragma mark Section A', 'pragma');
             expect(s).toContain('keyword.control.import.pragma.amxmodx');
         });
+
+        it('scopes `// #region <label>` folding markers', () => {
+            const s = scopeAt('// #region Public API', '#region');
+            expect(s).toContain('keyword.control.import.region.amxmodx');
+
+            const label = scopeAt('// #region Public API', 'Public API');
+            expect(label).toContain('meta.toc-list.region.amxmodx');
+        });
+
+        it('scopes `// #endregion` (with or without a label)', () => {
+            expect(scopeAt('// #endregion', '#endregion')).toContain(
+                'keyword.control.import.region.amxmodx',
+            );
+            expect(scopeAt('// #endregion Public API', '#endregion')).toContain(
+                'keyword.control.import.region.amxmodx',
+            );
+        });
+
+        it('also accepts the hash-less `// region` variant', () => {
+            expect(scopeAt('// region Setup', 'region')).toContain(
+                'keyword.control.import.region.amxmodx',
+            );
+        });
+
+        it('scopes `/*----[ Label ]----*/` banner comments', () => {
+            const line = '/*--------------------------------[ Constants ]--------------------------------*/';
+            const tokens = tokenScopes(line);
+            expect(tokens.some((t) => t.scopes.includes('comment.block.banner.amxmodx'))).toBe(true);
+            const label = tokens.find((t) => t.text === 'Constants');
+            expect(label?.scopes).toContain('meta.toc-list.banner.block.amxmodx');
+        });
     });
 
     describe('storage modifiers and constants', () => {
